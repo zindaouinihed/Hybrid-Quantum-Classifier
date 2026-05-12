@@ -7,6 +7,7 @@ from torch.utils.data import DataLoader
 from qiskit import QuantumCircuit
 from qiskit.circuit import Parameter
 from qiskit.quantum_info import Pauli
+
 from qiskit_machine_learning.neural_networks import EstimatorQNN
 from qiskit_machine_learning.connectors import TorchConnector
 
@@ -35,7 +36,6 @@ data = [
     if label in [3, 5]
 ]
 
-# نستعمل غير 800 صورة باش يكون خفيف
 data = data[:800]
 
 loader = DataLoader(
@@ -68,7 +68,7 @@ class CNN(nn.Module):
             nn.Linear(32 * 14 * 14, 16),
             nn.ReLU(),
 
-            nn.Linear(16, 2)   # output = 2 features
+            nn.Linear(16, 2)
         )
 
     def forward(self, x):
@@ -84,20 +84,40 @@ x1 = Parameter('x1')
 x2 = Parameter('x2')
 
 qc = QuantumCircuit(2)
-#superposition
+
+# Superposition
 qc.h(0)
 qc.h(1)
-#encoding
+
+# Encoding
 qc.ry(x1, 0)
 qc.ry(x2, 1)
-#entanglement
+
+# Entanglement
 qc.cx(0, 1)
 qc.cz(0, 1)
-#second quantum layer
+
+# Second quantum layer
 qc.ry(x1, 0)
 qc.ry(x2, 1)
-#optional stronger entanglement
+
+# Stronger entanglement
 qc.cx(1, 0)
+
+# ======================
+# SAVE QUANTUM CIRCUIT GRAPH
+# ======================
+
+fig = qc.draw(output='mpl')
+
+fig.savefig("quantum_circuit.png")
+
+print("Quantum circuit graph saved!")
+
+# ======================
+# 4. QNN
+# ======================
+
 observable = Pauli("ZZ")
 
 qnn = EstimatorQNN(
@@ -109,7 +129,7 @@ qnn = EstimatorQNN(
 model_qnn = TorchConnector(qnn)
 
 # ======================
-# 4. HYBRID MODEL
+# 5. HYBRID MODEL
 # ======================
 
 class HybridModel(nn.Module):
@@ -135,7 +155,7 @@ class HybridModel(nn.Module):
 model = HybridModel(cnn, model_qnn)
 
 # ======================
-# 5. TRAINING
+# 6. TRAINING
 # ======================
 
 optimizer = optim.Adam(
@@ -147,7 +167,9 @@ loss_fn = nn.BCEWithLogitsLoss()
 
 losses = []
 
-for epoch in range(30):
+epochs = 30
+
+for epoch in range(epochs):
 
     total_loss = 0
 
@@ -173,17 +195,17 @@ for epoch in range(30):
 
     losses.append(avg_loss)
 
-    print(f"Epoch {epoch}: Loss = {avg_loss}")
+    print(f"Epoch {epoch+1}/{epochs} - Loss = {avg_loss:.4f}")
 
 # ======================
-# 6. GRAPH
+# 7. TRAINING LOSS GRAPH
 # ======================
 
-plt.figure(figsize=(8,5))
+plt.figure(figsize=(8, 5))
 
 plt.plot(losses, marker='o')
 
-plt.title("Training Loss ↓")
+plt.title("Training Loss")
 
 plt.xlabel("Epoch")
 
@@ -191,4 +213,18 @@ plt.ylabel("Loss")
 
 plt.grid()
 
+plt.savefig("training_loss.png")
+
 plt.show()
+
+print("Training graph saved!")
+
+print("Training graph saved!")
+
+print("Training completed successfully!")
+
+
+
+        
+  
+
