@@ -1,23 +1,43 @@
-# Hybrid Quantum-Classical Image Classifier
+# Hybrid Quantum Classifier
 
-This project combines classical deep learning and quantum computing.
+A hybrid quantum-classical machine learning project built using Qiskit and PyTorch.
 
-## Technologies
-- PyTorch
+## Project Overview
+
+This project combines:
+- Quantum Computing
+- Classical Neural Networks
+- Hybrid Machine Learning
+
+The model uses a quantum circuit as part of the classification process.
+
+## Technologies Used
+
+- Python
 - Qiskit
-- Qiskit Machine Learning
+- PyTorch
+- NumPy
 - Matplotlib
 
 ## Features
-- CNN feature extraction
-- Quantum Neural Network (QNN)
-- Quantum entanglement using CX and CZ gates
-- Training loss visualization
 
-## Dataset
-CIFAR-10 (Cats vs Dogs)
+- Hybrid Quantum Neural Network
+- Quantum Circuit Integration
+- Training Loss Visualization
+- Binary Classification
 
+## Installation
+
+```bash
+pip install -r requirements.txt
+```
 ## Run
 
-`bash
+```bash
 py hybrid_quantum_classifier.py
+```
+##Training Result
+The training loss decreases over epochs, showing that the model learns successfully.
+
+##Author
+Nihed Zindaoui
